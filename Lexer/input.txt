@@ -1,0 +1,13 @@
+def FUNCwtf A B {
+  FUNCww(A),FUNCww(B); // hello
+}
+
+def FUNCww A {
+  Ing=A;
+  Ing=A;
+}
+
+main
+  int A:=123;
+  A||A;
+  FUNCww(A);
