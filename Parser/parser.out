@@ -1,0 +1,118 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    AND
+    BODY
+    CLOSE_CIRC_BR
+    CLOSE_SHAPED_BR
+    COLON
+    COMMENT_ONELINE
+    COMMENT_ONE_LINE
+    COMPARISON
+    CONSTRUCT
+    DIVIDE
+    DOLLAR
+    EQUAL
+    FUNCTION
+    FUNCTION_DEFINITION
+    FUNCTION_NAME
+    LOGICAL_OR
+    NOT
+    NUMBER
+    OPEN_CIRC_BR
+    OPEN_SHAPED_BR
+    OPERATOR_ASSIGNMENT
+    OR
+    QUOT
+    RESERVED_NAME
+    SEMICOLON
+    START_MAIN
+    STRING
+    TYPE_INT
+    TYPE_STRING
+    VARIABLE
+    XOR
+
+Grammar
+
+Rule 0     S' -> multispace
+Rule 1     multispace -> SPACE
+Rule 2     multispace -> SPACE multispace
+
+Terminals, with rules where they appear
+
+AND                  : 
+BODY                 : 
+CLOSE_CIRC_BR        : 
+CLOSE_SHAPED_BR      : 
+COLON                : 
+COMMENT_ONELINE      : 
+COMMENT_ONE_LINE     : 
+COMPARISON           : 
+CONSTRUCT            : 
+DIVIDE               : 
+DOLLAR               : 
+EQUAL                : 
+FUNCTION             : 
+FUNCTION_DEFINITION  : 
+FUNCTION_NAME        : 
+LOGICAL_OR           : 
+NOT                  : 
+NUMBER               : 
+OPEN_CIRC_BR         : 
+OPEN_SHAPED_BR       : 
+OPERATOR_ASSIGNMENT  : 
+OR                   : 
+QUOT                 : 
+RESERVED_NAME        : 
+SEMICOLON            : 
+SPACE                : 1 2
+START_MAIN           : 
+STRING               : 
+TYPE_INT             : 
+TYPE_STRING          : 
+VARIABLE             : 
+XOR                  : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+multispace           : 2 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . multispace
+    (1) multispace -> . SPACE
+    (2) multispace -> . SPACE multispace
+
+    SPACE           shift and go to state 2
+
+    multispace                     shift and go to state 1
+
+state 1
+
+    (0) S' -> multispace .
+
+
+
+state 2
+
+    (1) multispace -> SPACE .
+    (2) multispace -> SPACE . multispace
+    (1) multispace -> . SPACE
+    (2) multispace -> . SPACE multispace
+
+    $end            reduce using rule 1 (multispace -> SPACE .)
+    SPACE           shift and go to state 2
+
+    multispace                     shift and go to state 3
+
+state 3
+
+    (2) multispace -> SPACE multispace .
+
+    $end            reduce using rule 2 (multispace -> SPACE multispace .)
+

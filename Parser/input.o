@@ -1,0 +1,3 @@
+LexToken(NUM,1,1,0)
+LexToken(PLUS,'+',1,2)
+LexToken(NUM,1,1,4)
