@@ -40,31 +40,21 @@ start = 'functions'
 
 def p_functions(p):
     '''functions : main
-                 | FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
                  | FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions'''
-    # function = Function(p[3], function_variables, p[6])
-    # function_variables.clear()
-    # main_program.functions.append(function)
-    # print(main_program)
+    if len(p) != 2 :
+        function = Function(p[3], function_variables, p[6])
+        function_variables.clear()
+        main_program.functions.append(function)
+        print(main_program)
 
-def p_main(p):
-    ''' main : MAIN main_functions'''
-    print("main hihihaha")
 
-def p_main_functions(p):
-    '''main_functions : call_functions LOGICAL_OR call_functions SEMICOLON main_functions
-                      | call_functions SEMICOLON main_functions
-                      | call_functions SEMICOLON'''
-    print(p[1]) 
-
-def p_call_functions(p):
-    '''call_functions : multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR'''
 
 def p_variables(p):
     '''variables : multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
                  | multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR 
                  | multispace VARIABLE variables
-                 | multispace VARIABLE '''
+                 | multispace VARIABLE 
+                 | ''' # смотреть сюда, если недоумеваете, почему поставили пробел после названии функции и всё поламалось!
     global count
     if len(p) ==  3:
         function_variables.append(Variable(int, p[2], 0)) # пока int, потом нужно немного поменять
@@ -81,6 +71,46 @@ def p_variables(p):
             function_variables.pop()
         function_variables.append(Structurs(variables_))
 
+
+def p_main(p):
+    ''' main : MAIN main_functions'''
+    print("main hihihaha")
+
+def p_main_functions(p):
+    '''main_functions : multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+                      | multispace call_functions SEMICOLON main_functions
+                      | multispace new_variable SEMICOLON main_functions
+                      | multispace unification SEMICOLON main_functions
+                      | multispace change_variable SEMICOLON main_functions
+                      | '''
+    if len(p) > 1 :
+        print(p[1]) 
+
+
+def p_call_functions(p):
+    '''call_functions : FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR'''
+
+def p_new_variable(p):
+    '''new_variable : TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
+                    | TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT'''
+    if len(p) == 6 :
+        print(p[5])
+    else :
+        print(p[5:8])
+
+
+def p_unification(p):
+    '''unification : OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     AND         OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     OR          OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     XOR         OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     COMPARISON  OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR'''
+    print("hello")
+    # тут нужно проверять, что вообще есть такая переменная, а потом вызывать
+
+def p_change_variable(p):
+    '''change_variable : DOLLAR VARIABLE EQUAL NUMBER
+                       | DOLLAR VARIABLE EQUAL QUOT STRING QUOT
+                       | DOLLAR VARIABLE EQUAL VARIABLE'''
 
 def p_multispace(p):
     '''multispace : SPACE multispace

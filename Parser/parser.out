@@ -2,88 +2,91 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    AND
     COLON
     COMMENT_ONELINE
     COMMENT_ONE_LINE
-    COMPARISON
     DIVIDE
-    DOLLAR
-    EQUAL
     FUNCTION
     NOT
-    NUMBER
-    OPERATOR_ASSIGNMENT
-    OR
-    QUOT
     RESERVED_NAME
-    STRING
-    TYPE_INT
-    TYPE_STRING
-    XOR
 
 Grammar
 
 Rule 0     S' -> functions
 Rule 1     functions -> main
-Rule 2     functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-Rule 3     functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
-Rule 4     main -> MAIN main_functions
-Rule 5     main_functions -> call_functions LOGICAL_OR call_functions SEMICOLON main_functions
-Rule 6     main_functions -> call_functions SEMICOLON main_functions
-Rule 7     main_functions -> call_functions SEMICOLON
-Rule 8     call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
-Rule 9     variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-Rule 10    variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-Rule 11    variables -> multispace VARIABLE variables
-Rule 12    variables -> multispace VARIABLE
-Rule 13    multispace -> SPACE multispace
-Rule 14    multispace -> SPACE
+Rule 2     functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+Rule 3     variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+Rule 4     variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+Rule 5     variables -> multispace VARIABLE variables
+Rule 6     variables -> multispace VARIABLE
+Rule 7     variables -> <empty>
+Rule 8     main -> MAIN main_functions
+Rule 9     main_functions -> multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+Rule 10    main_functions -> multispace call_functions SEMICOLON main_functions
+Rule 11    main_functions -> multispace new_variable SEMICOLON main_functions
+Rule 12    main_functions -> multispace unification SEMICOLON main_functions
+Rule 13    main_functions -> multispace change_variable SEMICOLON main_functions
+Rule 14    main_functions -> <empty>
+Rule 15    call_functions -> FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
+Rule 16    new_variable -> TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
+Rule 17    new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT
+Rule 18    unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+Rule 19    unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+Rule 20    unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+Rule 21    unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+Rule 22    change_variable -> DOLLAR VARIABLE EQUAL NUMBER
+Rule 23    change_variable -> DOLLAR VARIABLE EQUAL QUOT STRING QUOT
+Rule 24    change_variable -> DOLLAR VARIABLE EQUAL VARIABLE
+Rule 25    multispace -> SPACE multispace
+Rule 26    multispace -> SPACE
 
 Terminals, with rules where they appear
 
-AND                  : 
-BODY                 : 2 3
-CLOSE_CIRC_BR        : 8 9 10
-CLOSE_SHAPED_BR      : 2 3
+AND                  : 18
+BODY                 : 2
+CLOSE_CIRC_BR        : 3 4 15 18 18 19 19 20 20 21 21
+CLOSE_SHAPED_BR      : 2
 COLON                : 
 COMMENT_ONELINE      : 
 COMMENT_ONE_LINE     : 
-COMPARISON           : 
-CONSTRUCT            : 9 10
+COMPARISON           : 21
+CONSTRUCT            : 3 4
 DIVIDE               : 
-DOLLAR               : 
-EQUAL                : 
+DOLLAR               : 22 23 24
+EQUAL                : 22 23 24
 FUNCTION             : 
-FUNCTION_DEFINITION  : 2 3
-FUNCTION_NAME        : 2 3 8
-LOGICAL_OR           : 5
-MAIN                 : 4
+FUNCTION_DEFINITION  : 2
+FUNCTION_NAME        : 2 15
+LOGICAL_OR           : 9
+MAIN                 : 8
 NOT                  : 
-NUMBER               : 
-OPEN_CIRC_BR         : 8 9 10
-OPEN_SHAPED_BR       : 2 3
-OPERATOR_ASSIGNMENT  : 
-OR                   : 
-QUOT                 : 
+NUMBER               : 16 22
+OPEN_CIRC_BR         : 3 4 15 18 18 19 19 20 20 21 21
+OPEN_SHAPED_BR       : 2
+OPERATOR_ASSIGNMENT  : 16 17
+OR                   : 19
+QUOT                 : 17 17 23 23
 RESERVED_NAME        : 
-SEMICOLON            : 5 6 7
-SPACE                : 13 14
-STRING               : 
-TYPE_INT             : 
-TYPE_STRING          : 
-VARIABLE             : 11 12
-XOR                  : 
+SEMICOLON            : 9 10 11 12 13
+SPACE                : 25 26
+STRING               : 17 23
+TYPE_INT             : 16
+TYPE_STRING          : 17
+VARIABLE             : 5 6 16 17 18 18 19 19 20 20 21 21 22 23 24 24
+XOR                  : 20
 error                : 
 
 Nonterminals, with rules where they appear
 
-call_functions       : 5 5 6 7
-functions            : 3 0
-main                 : 1 2
-main_functions       : 4 5 6
-multispace           : 2 3 8 9 10 11 12 13
-variables            : 2 3 8 9 9 10 11
+call_functions       : 9 9 10
+change_variable      : 13
+functions            : 2 0
+main                 : 1
+main_functions       : 8 9 10 11 12 13
+multispace           : 2 3 4 5 6 9 10 11 12 13 16 17 25
+new_variable         : 11
+unification          : 12
+variables            : 2 3 3 4 5 15
 
 Parsing method: LALR
 
@@ -91,9 +94,8 @@ state 0
 
     (0) S' -> . functions
     (1) functions -> . main
-    (2) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
-    (4) main -> . MAIN main_functions
+    (2) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (8) main -> . MAIN main_functions
 
     FUNCTION_DEFINITION shift and go to state 3
     MAIN            shift and go to state 4
@@ -116,10 +118,9 @@ state 2
 
 state 3
 
-    (2) functions -> FUNCTION_DEFINITION . multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION . multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (2) functions -> FUNCTION_DEFINITION . multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
     SPACE           shift and go to state 6
 
@@ -127,349 +128,773 @@ state 3
 
 state 4
 
-    (4) main -> MAIN . main_functions
-    (5) main_functions -> . call_functions LOGICAL_OR call_functions SEMICOLON main_functions
-    (6) main_functions -> . call_functions SEMICOLON main_functions
-    (7) main_functions -> . call_functions SEMICOLON
-    (8) call_functions -> . multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (8) main -> MAIN . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
+    $end            reduce using rule 14 (main_functions -> .)
     SPACE           shift and go to state 6
 
     main_functions                 shift and go to state 7
-    call_functions                 shift and go to state 8
-    multispace                     shift and go to state 9
+    multispace                     shift and go to state 8
 
 state 5
 
-    (2) functions -> FUNCTION_DEFINITION multispace . FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION multispace . FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (2) functions -> FUNCTION_DEFINITION multispace . FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
 
-    FUNCTION_NAME   shift and go to state 10
+    FUNCTION_NAME   shift and go to state 9
 
 
 state 6
 
-    (13) multispace -> SPACE . multispace
-    (14) multispace -> SPACE .
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (25) multispace -> SPACE . multispace
+    (26) multispace -> SPACE .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-    FUNCTION_NAME   reduce using rule 14 (multispace -> SPACE .)
-    OPEN_CIRC_BR    reduce using rule 14 (multispace -> SPACE .)
-    VARIABLE        reduce using rule 14 (multispace -> SPACE .)
+    FUNCTION_NAME   reduce using rule 26 (multispace -> SPACE .)
+    TYPE_INT        reduce using rule 26 (multispace -> SPACE .)
+    TYPE_STRING     reduce using rule 26 (multispace -> SPACE .)
+    OPEN_CIRC_BR    reduce using rule 26 (multispace -> SPACE .)
+    DOLLAR          reduce using rule 26 (multispace -> SPACE .)
+    VARIABLE        reduce using rule 26 (multispace -> SPACE .)
     SPACE           shift and go to state 6
 
-    multispace                     shift and go to state 11
+    multispace                     shift and go to state 10
 
 state 7
 
-    (4) main -> MAIN main_functions .
+    (8) main -> MAIN main_functions .
 
-    $end            reduce using rule 4 (main -> MAIN main_functions .)
+    $end            reduce using rule 8 (main -> MAIN main_functions .)
 
 
 state 8
 
-    (5) main_functions -> call_functions . LOGICAL_OR call_functions SEMICOLON main_functions
-    (6) main_functions -> call_functions . SEMICOLON main_functions
-    (7) main_functions -> call_functions . SEMICOLON
+    (9) main_functions -> multispace . call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> multispace . call_functions SEMICOLON main_functions
+    (11) main_functions -> multispace . new_variable SEMICOLON main_functions
+    (12) main_functions -> multispace . unification SEMICOLON main_functions
+    (13) main_functions -> multispace . change_variable SEMICOLON main_functions
+    (15) call_functions -> . FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
+    (16) new_variable -> . TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
+    (17) new_variable -> . TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT
+    (18) unification -> . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (19) unification -> . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (20) unification -> . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (21) unification -> . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (22) change_variable -> . DOLLAR VARIABLE EQUAL NUMBER
+    (23) change_variable -> . DOLLAR VARIABLE EQUAL QUOT STRING QUOT
+    (24) change_variable -> . DOLLAR VARIABLE EQUAL VARIABLE
 
-    LOGICAL_OR      shift and go to state 12
-    SEMICOLON       shift and go to state 13
+    FUNCTION_NAME   shift and go to state 15
+    TYPE_INT        shift and go to state 17
+    TYPE_STRING     shift and go to state 18
+    OPEN_CIRC_BR    shift and go to state 16
+    DOLLAR          shift and go to state 19
 
+    call_functions                 shift and go to state 11
+    new_variable                   shift and go to state 12
+    unification                    shift and go to state 13
+    change_variable                shift and go to state 14
 
 state 9
 
-    (8) call_functions -> multispace . FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME . variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (3) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> . multispace VARIABLE variables
+    (6) variables -> . multispace VARIABLE
+    (7) variables -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-    FUNCTION_NAME   shift and go to state 14
+    OPEN_SHAPED_BR  reduce using rule 7 (variables -> .)
+    SPACE           shift and go to state 6
 
+    multispace                     shift and go to state 20
+    variables                      shift and go to state 21
 
 state 10
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME . variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME . variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
-    (9) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> . multispace VARIABLE variables
-    (12) variables -> . multispace VARIABLE
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (25) multispace -> SPACE multispace .
 
-    SPACE           shift and go to state 6
+    FUNCTION_NAME   reduce using rule 25 (multispace -> SPACE multispace .)
+    TYPE_INT        reduce using rule 25 (multispace -> SPACE multispace .)
+    TYPE_STRING     reduce using rule 25 (multispace -> SPACE multispace .)
+    OPEN_CIRC_BR    reduce using rule 25 (multispace -> SPACE multispace .)
+    DOLLAR          reduce using rule 25 (multispace -> SPACE multispace .)
+    VARIABLE        reduce using rule 25 (multispace -> SPACE multispace .)
 
-    multispace                     shift and go to state 15
-    variables                      shift and go to state 16
 
 state 11
 
-    (13) multispace -> SPACE multispace .
+    (9) main_functions -> multispace call_functions . LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> multispace call_functions . SEMICOLON main_functions
 
-    FUNCTION_NAME   reduce using rule 13 (multispace -> SPACE multispace .)
-    OPEN_CIRC_BR    reduce using rule 13 (multispace -> SPACE multispace .)
-    VARIABLE        reduce using rule 13 (multispace -> SPACE multispace .)
+    LOGICAL_OR      shift and go to state 22
+    SEMICOLON       shift and go to state 23
 
 
 state 12
 
-    (5) main_functions -> call_functions LOGICAL_OR . call_functions SEMICOLON main_functions
-    (8) call_functions -> . multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (11) main_functions -> multispace new_variable . SEMICOLON main_functions
 
-    SPACE           shift and go to state 6
+    SEMICOLON       shift and go to state 24
 
-    call_functions                 shift and go to state 17
-    multispace                     shift and go to state 9
 
 state 13
 
-    (6) main_functions -> call_functions SEMICOLON . main_functions
-    (7) main_functions -> call_functions SEMICOLON .
-    (5) main_functions -> . call_functions LOGICAL_OR call_functions SEMICOLON main_functions
-    (6) main_functions -> . call_functions SEMICOLON main_functions
-    (7) main_functions -> . call_functions SEMICOLON
-    (8) call_functions -> . multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (12) main_functions -> multispace unification . SEMICOLON main_functions
 
-    $end            reduce using rule 7 (main_functions -> call_functions SEMICOLON .)
-    SPACE           shift and go to state 6
+    SEMICOLON       shift and go to state 25
 
-    call_functions                 shift and go to state 8
-    main_functions                 shift and go to state 18
-    multispace                     shift and go to state 9
 
 state 14
 
-    (8) call_functions -> multispace FUNCTION_NAME . OPEN_CIRC_BR variables CLOSE_CIRC_BR
+    (13) main_functions -> multispace change_variable . SEMICOLON main_functions
 
-    OPEN_CIRC_BR    shift and go to state 19
+    SEMICOLON       shift and go to state 26
 
 
 state 15
 
-    (9) variables -> multispace . OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> multispace . OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> multispace . VARIABLE variables
-    (12) variables -> multispace . VARIABLE
+    (15) call_functions -> FUNCTION_NAME . OPEN_CIRC_BR variables CLOSE_CIRC_BR
 
-    OPEN_CIRC_BR    shift and go to state 20
-    VARIABLE        shift and go to state 21
+    OPEN_CIRC_BR    shift and go to state 27
 
 
 state 16
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables . OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables . OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (18) unification -> OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (19) unification -> OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (20) unification -> OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (21) unification -> OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
 
-    OPEN_SHAPED_BR  shift and go to state 22
+    VARIABLE        shift and go to state 28
 
 
 state 17
 
-    (5) main_functions -> call_functions LOGICAL_OR call_functions . SEMICOLON main_functions
-
-    SEMICOLON       shift and go to state 23
-
-
-state 18
-
-    (6) main_functions -> call_functions SEMICOLON main_functions .
-
-    $end            reduce using rule 6 (main_functions -> call_functions SEMICOLON main_functions .)
-
-
-state 19
-
-    (8) call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR . variables CLOSE_CIRC_BR
-    (9) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> . multispace VARIABLE variables
-    (12) variables -> . multispace VARIABLE
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (16) new_variable -> TYPE_INT . multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
     SPACE           shift and go to state 6
 
-    multispace                     shift and go to state 15
-    variables                      shift and go to state 24
+    multispace                     shift and go to state 29
+
+state 18
+
+    (17) new_variable -> TYPE_STRING . multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
+
+    SPACE           shift and go to state 6
+
+    multispace                     shift and go to state 30
+
+state 19
+
+    (22) change_variable -> DOLLAR . VARIABLE EQUAL NUMBER
+    (23) change_variable -> DOLLAR . VARIABLE EQUAL QUOT STRING QUOT
+    (24) change_variable -> DOLLAR . VARIABLE EQUAL VARIABLE
+
+    VARIABLE        shift and go to state 31
+
 
 state 20
 
-    (9) variables -> multispace OPEN_CIRC_BR . CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> multispace OPEN_CIRC_BR . CONSTRUCT variables CLOSE_CIRC_BR
+    (3) variables -> multispace . OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> multispace . OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> multispace . VARIABLE variables
+    (6) variables -> multispace . VARIABLE
 
-    CONSTRUCT       shift and go to state 25
+    OPEN_CIRC_BR    shift and go to state 32
+    VARIABLE        shift and go to state 33
 
 
 state 21
 
-    (11) variables -> multispace VARIABLE . variables
-    (12) variables -> multispace VARIABLE .
-    (9) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> . multispace VARIABLE variables
-    (12) variables -> . multispace VARIABLE
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables . OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
 
-    OPEN_SHAPED_BR  reduce using rule 12 (variables -> multispace VARIABLE .)
-    CLOSE_CIRC_BR   reduce using rule 12 (variables -> multispace VARIABLE .)
-    SPACE           shift and go to state 6
+    OPEN_SHAPED_BR  shift and go to state 34
 
-    multispace                     shift and go to state 15
-    variables                      shift and go to state 26
 
 state 22
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR . BODY CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR . BODY CLOSE_SHAPED_BR functions
+    (9) main_functions -> multispace call_functions LOGICAL_OR . call_functions SEMICOLON main_functions
+    (15) call_functions -> . FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
 
-    BODY            shift and go to state 27
+    FUNCTION_NAME   shift and go to state 15
 
+    call_functions                 shift and go to state 35
 
 state 23
 
-    (5) main_functions -> call_functions LOGICAL_OR call_functions SEMICOLON . main_functions
-    (5) main_functions -> . call_functions LOGICAL_OR call_functions SEMICOLON main_functions
-    (6) main_functions -> . call_functions SEMICOLON main_functions
-    (7) main_functions -> . call_functions SEMICOLON
-    (8) call_functions -> . multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (10) main_functions -> multispace call_functions SEMICOLON . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
+    $end            reduce using rule 14 (main_functions -> .)
     SPACE           shift and go to state 6
 
-    call_functions                 shift and go to state 8
-    main_functions                 shift and go to state 28
-    multispace                     shift and go to state 9
+    multispace                     shift and go to state 8
+    main_functions                 shift and go to state 36
 
 state 24
 
-    (8) call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR variables . CLOSE_CIRC_BR
+    (11) main_functions -> multispace new_variable SEMICOLON . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-    CLOSE_CIRC_BR   shift and go to state 29
+    $end            reduce using rule 14 (main_functions -> .)
+    SPACE           shift and go to state 6
 
+    multispace                     shift and go to state 8
+    main_functions                 shift and go to state 37
 
 state 25
 
-    (9) variables -> multispace OPEN_CIRC_BR CONSTRUCT . variables CLOSE_CIRC_BR variables
-    (10) variables -> multispace OPEN_CIRC_BR CONSTRUCT . variables CLOSE_CIRC_BR
-    (9) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> . multispace VARIABLE variables
-    (12) variables -> . multispace VARIABLE
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (12) main_functions -> multispace unification SEMICOLON . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
+    $end            reduce using rule 14 (main_functions -> .)
     SPACE           shift and go to state 6
 
-    multispace                     shift and go to state 15
-    variables                      shift and go to state 30
+    multispace                     shift and go to state 8
+    main_functions                 shift and go to state 38
 
 state 26
 
-    (11) variables -> multispace VARIABLE variables .
+    (13) main_functions -> multispace change_variable SEMICOLON . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-    OPEN_SHAPED_BR  reduce using rule 11 (variables -> multispace VARIABLE variables .)
-    CLOSE_CIRC_BR   reduce using rule 11 (variables -> multispace VARIABLE variables .)
+    $end            reduce using rule 14 (main_functions -> .)
+    SPACE           shift and go to state 6
 
+    multispace                     shift and go to state 8
+    main_functions                 shift and go to state 39
 
 state 27
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY . CLOSE_SHAPED_BR main
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY . CLOSE_SHAPED_BR functions
+    (15) call_functions -> FUNCTION_NAME OPEN_CIRC_BR . variables CLOSE_CIRC_BR
+    (3) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> . multispace VARIABLE variables
+    (6) variables -> . multispace VARIABLE
+    (7) variables -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-    CLOSE_SHAPED_BR shift and go to state 31
+    CLOSE_CIRC_BR   reduce using rule 7 (variables -> .)
+    SPACE           shift and go to state 6
 
+    variables                      shift and go to state 40
+    multispace                     shift and go to state 20
 
 state 28
 
-    (5) main_functions -> call_functions LOGICAL_OR call_functions SEMICOLON main_functions .
+    (18) unification -> OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (19) unification -> OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (20) unification -> OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (21) unification -> OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
 
-    $end            reduce using rule 5 (main_functions -> call_functions LOGICAL_OR call_functions SEMICOLON main_functions .)
+    CLOSE_CIRC_BR   shift and go to state 41
 
 
 state 29
 
-    (8) call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .
+    (16) new_variable -> TYPE_INT multispace . VARIABLE OPERATOR_ASSIGNMENT NUMBER
 
-    LOGICAL_OR      reduce using rule 8 (call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .)
-    SEMICOLON       reduce using rule 8 (call_functions -> multispace FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .)
+    VARIABLE        shift and go to state 42
 
 
 state 30
 
-    (9) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables . CLOSE_CIRC_BR variables
-    (10) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables . CLOSE_CIRC_BR
+    (17) new_variable -> TYPE_STRING multispace . VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT
 
-    CLOSE_CIRC_BR   shift and go to state 32
+    VARIABLE        shift and go to state 43
 
 
 state 31
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR . main
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR . functions
-    (4) main -> . MAIN main_functions
-    (1) functions -> . main
-    (2) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main
-    (3) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (22) change_variable -> DOLLAR VARIABLE . EQUAL NUMBER
+    (23) change_variable -> DOLLAR VARIABLE . EQUAL QUOT STRING QUOT
+    (24) change_variable -> DOLLAR VARIABLE . EQUAL VARIABLE
 
-    MAIN            shift and go to state 4
-    FUNCTION_DEFINITION shift and go to state 3
+    EQUAL           shift and go to state 44
 
-    main                           shift and go to state 33
-    functions                      shift and go to state 34
 
 state 32
 
-    (9) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR . variables
-    (10) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .
-    (9) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
-    (10) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
-    (11) variables -> . multispace VARIABLE variables
-    (12) variables -> . multispace VARIABLE
-    (13) multispace -> . SPACE multispace
-    (14) multispace -> . SPACE
+    (3) variables -> multispace OPEN_CIRC_BR . CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> multispace OPEN_CIRC_BR . CONSTRUCT variables CLOSE_CIRC_BR
 
-    OPEN_SHAPED_BR  reduce using rule 10 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
-    CLOSE_CIRC_BR   reduce using rule 10 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
-    SPACE           shift and go to state 6
+    CONSTRUCT       shift and go to state 45
 
-    multispace                     shift and go to state 15
-    variables                      shift and go to state 35
 
 state 33
 
-    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main .
-    (1) functions -> main .
+    (5) variables -> multispace VARIABLE . variables
+    (6) variables -> multispace VARIABLE .
+    (3) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> . multispace VARIABLE variables
+    (6) variables -> . multispace VARIABLE
+    (7) variables -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
 
-  ! reduce/reduce conflict for $end resolved using rule 1 (functions -> main .)
-    $end            reduce using rule 1 (functions -> main .)
+  ! reduce/reduce conflict for OPEN_SHAPED_BR resolved using rule 6 (variables -> multispace VARIABLE .)
+  ! reduce/reduce conflict for CLOSE_CIRC_BR resolved using rule 6 (variables -> multispace VARIABLE .)
+    OPEN_SHAPED_BR  reduce using rule 6 (variables -> multispace VARIABLE .)
+    CLOSE_CIRC_BR   reduce using rule 6 (variables -> multispace VARIABLE .)
+    SPACE           shift and go to state 6
 
-  ! $end            [ reduce using rule 2 (functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main .) ]
+  ! OPEN_SHAPED_BR  [ reduce using rule 7 (variables -> .) ]
+  ! CLOSE_CIRC_BR   [ reduce using rule 7 (variables -> .) ]
 
+    multispace                     shift and go to state 20
+    variables                      shift and go to state 46
 
 state 34
 
-    (3) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions .
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR . BODY CLOSE_SHAPED_BR functions
 
-    $end            reduce using rule 3 (functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions .)
+    BODY            shift and go to state 47
 
 
 state 35
 
-    (9) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .
+    (9) main_functions -> multispace call_functions LOGICAL_OR call_functions . SEMICOLON main_functions
 
-    OPEN_SHAPED_BR  reduce using rule 9 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .)
-    CLOSE_CIRC_BR   reduce using rule 9 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .)
+    SEMICOLON       shift and go to state 48
+
+
+state 36
+
+    (10) main_functions -> multispace call_functions SEMICOLON main_functions .
+
+    $end            reduce using rule 10 (main_functions -> multispace call_functions SEMICOLON main_functions .)
+
+
+state 37
+
+    (11) main_functions -> multispace new_variable SEMICOLON main_functions .
+
+    $end            reduce using rule 11 (main_functions -> multispace new_variable SEMICOLON main_functions .)
+
+
+state 38
+
+    (12) main_functions -> multispace unification SEMICOLON main_functions .
+
+    $end            reduce using rule 12 (main_functions -> multispace unification SEMICOLON main_functions .)
+
+
+state 39
+
+    (13) main_functions -> multispace change_variable SEMICOLON main_functions .
+
+    $end            reduce using rule 13 (main_functions -> multispace change_variable SEMICOLON main_functions .)
+
+
+state 40
+
+    (15) call_functions -> FUNCTION_NAME OPEN_CIRC_BR variables . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 49
+
+
+state 41
+
+    (18) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR . AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (19) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR . OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (20) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR . XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+    (21) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR . COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+
+    AND             shift and go to state 50
+    OR              shift and go to state 51
+    XOR             shift and go to state 52
+    COMPARISON      shift and go to state 53
+
+
+state 42
+
+    (16) new_variable -> TYPE_INT multispace VARIABLE . OPERATOR_ASSIGNMENT NUMBER
+
+    OPERATOR_ASSIGNMENT shift and go to state 54
+
+
+state 43
+
+    (17) new_variable -> TYPE_STRING multispace VARIABLE . OPERATOR_ASSIGNMENT QUOT STRING QUOT
+
+    OPERATOR_ASSIGNMENT shift and go to state 55
+
+
+state 44
+
+    (22) change_variable -> DOLLAR VARIABLE EQUAL . NUMBER
+    (23) change_variable -> DOLLAR VARIABLE EQUAL . QUOT STRING QUOT
+    (24) change_variable -> DOLLAR VARIABLE EQUAL . VARIABLE
+
+    NUMBER          shift and go to state 57
+    QUOT            shift and go to state 58
+    VARIABLE        shift and go to state 56
+
+
+state 45
+
+    (3) variables -> multispace OPEN_CIRC_BR CONSTRUCT . variables CLOSE_CIRC_BR variables
+    (4) variables -> multispace OPEN_CIRC_BR CONSTRUCT . variables CLOSE_CIRC_BR
+    (3) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> . multispace VARIABLE variables
+    (6) variables -> . multispace VARIABLE
+    (7) variables -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
+
+    CLOSE_CIRC_BR   reduce using rule 7 (variables -> .)
+    SPACE           shift and go to state 6
+
+    multispace                     shift and go to state 20
+    variables                      shift and go to state 59
+
+state 46
+
+    (5) variables -> multispace VARIABLE variables .
+
+    OPEN_SHAPED_BR  reduce using rule 5 (variables -> multispace VARIABLE variables .)
+    CLOSE_CIRC_BR   reduce using rule 5 (variables -> multispace VARIABLE variables .)
+
+
+state 47
+
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY . CLOSE_SHAPED_BR functions
+
+    CLOSE_SHAPED_BR shift and go to state 60
+
+
+state 48
+
+    (9) main_functions -> multispace call_functions LOGICAL_OR call_functions SEMICOLON . main_functions
+    (9) main_functions -> . multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions
+    (10) main_functions -> . multispace call_functions SEMICOLON main_functions
+    (11) main_functions -> . multispace new_variable SEMICOLON main_functions
+    (12) main_functions -> . multispace unification SEMICOLON main_functions
+    (13) main_functions -> . multispace change_variable SEMICOLON main_functions
+    (14) main_functions -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
+
+    $end            reduce using rule 14 (main_functions -> .)
+    SPACE           shift and go to state 6
+
+    multispace                     shift and go to state 8
+    main_functions                 shift and go to state 61
+
+state 49
+
+    (15) call_functions -> FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .
+
+    LOGICAL_OR      reduce using rule 15 (call_functions -> FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .)
+    SEMICOLON       reduce using rule 15 (call_functions -> FUNCTION_NAME OPEN_CIRC_BR variables CLOSE_CIRC_BR .)
+
+
+state 50
+
+    (18) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+
+    OPEN_CIRC_BR    shift and go to state 62
+
+
+state 51
+
+    (19) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+
+    OPEN_CIRC_BR    shift and go to state 63
+
+
+state 52
+
+    (20) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+
+    OPEN_CIRC_BR    shift and go to state 64
+
+
+state 53
+
+    (21) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON . OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
+
+    OPEN_CIRC_BR    shift and go to state 65
+
+
+state 54
+
+    (16) new_variable -> TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT . NUMBER
+
+    NUMBER          shift and go to state 66
+
+
+state 55
+
+    (17) new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT . QUOT STRING QUOT
+
+    QUOT            shift and go to state 67
+
+
+state 56
+
+    (24) change_variable -> DOLLAR VARIABLE EQUAL VARIABLE .
+
+    SEMICOLON       reduce using rule 24 (change_variable -> DOLLAR VARIABLE EQUAL VARIABLE .)
+
+
+state 57
+
+    (22) change_variable -> DOLLAR VARIABLE EQUAL NUMBER .
+
+    SEMICOLON       reduce using rule 22 (change_variable -> DOLLAR VARIABLE EQUAL NUMBER .)
+
+
+state 58
+
+    (23) change_variable -> DOLLAR VARIABLE EQUAL QUOT . STRING QUOT
+
+    STRING          shift and go to state 68
+
+
+state 59
+
+    (3) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables . CLOSE_CIRC_BR variables
+    (4) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 69
+
+
+state 60
+
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR . functions
+    (1) functions -> . main
+    (2) functions -> . FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions
+    (8) main -> . MAIN main_functions
+
+    FUNCTION_DEFINITION shift and go to state 3
+    MAIN            shift and go to state 4
+
+    functions                      shift and go to state 70
+    main                           shift and go to state 2
+
+state 61
+
+    (9) main_functions -> multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions .
+
+    $end            reduce using rule 9 (main_functions -> multispace call_functions LOGICAL_OR call_functions SEMICOLON main_functions .)
+
+
+state 62
+
+    (18) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR
+
+    VARIABLE        shift and go to state 71
+
+
+state 63
+
+    (19) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR
+
+    VARIABLE        shift and go to state 72
+
+
+state 64
+
+    (20) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR
+
+    VARIABLE        shift and go to state 73
+
+
+state 65
+
+    (21) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR . VARIABLE CLOSE_CIRC_BR
+
+    VARIABLE        shift and go to state 74
+
+
+state 66
+
+    (16) new_variable -> TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER .
+
+    SEMICOLON       reduce using rule 16 (new_variable -> TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER .)
+
+
+state 67
+
+    (17) new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT . STRING QUOT
+
+    STRING          shift and go to state 75
+
+
+state 68
+
+    (23) change_variable -> DOLLAR VARIABLE EQUAL QUOT STRING . QUOT
+
+    QUOT            shift and go to state 76
+
+
+state 69
+
+    (3) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR . variables
+    (4) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .
+    (3) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables
+    (4) variables -> . multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR
+    (5) variables -> . multispace VARIABLE variables
+    (6) variables -> . multispace VARIABLE
+    (7) variables -> .
+    (25) multispace -> . SPACE multispace
+    (26) multispace -> . SPACE
+
+  ! reduce/reduce conflict for OPEN_SHAPED_BR resolved using rule 4 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
+  ! reduce/reduce conflict for CLOSE_CIRC_BR resolved using rule 4 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
+    OPEN_SHAPED_BR  reduce using rule 4 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
+    CLOSE_CIRC_BR   reduce using rule 4 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR .)
+    SPACE           shift and go to state 6
+
+  ! OPEN_SHAPED_BR  [ reduce using rule 7 (variables -> .) ]
+  ! CLOSE_CIRC_BR   [ reduce using rule 7 (variables -> .) ]
+
+    multispace                     shift and go to state 20
+    variables                      shift and go to state 77
+
+state 70
+
+    (2) functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions .
+
+    $end            reduce using rule 2 (functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR functions .)
+
+
+state 71
+
+    (18) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 78
+
+
+state 72
+
+    (19) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 79
+
+
+state 73
+
+    (20) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 80
+
+
+state 74
+
+    (21) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE . CLOSE_CIRC_BR
+
+    CLOSE_CIRC_BR   shift and go to state 81
+
+
+state 75
+
+    (17) new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING . QUOT
+
+    QUOT            shift and go to state 82
+
+
+state 76
+
+    (23) change_variable -> DOLLAR VARIABLE EQUAL QUOT STRING QUOT .
+
+    SEMICOLON       reduce using rule 23 (change_variable -> DOLLAR VARIABLE EQUAL QUOT STRING QUOT .)
+
+
+state 77
+
+    (3) variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .
+
+    OPEN_SHAPED_BR  reduce using rule 3 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .)
+    CLOSE_CIRC_BR   reduce using rule 3 (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR variables .)
+
+
+state 78
+
+    (18) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .
+
+    SEMICOLON       reduce using rule 18 (unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR AND OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .)
+
+
+state 79
+
+    (19) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .
+
+    SEMICOLON       reduce using rule 19 (unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR OR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .)
+
+
+state 80
+
+    (20) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .
+
+    SEMICOLON       reduce using rule 20 (unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR XOR OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .)
+
+
+state 81
+
+    (21) unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .
+
+    SEMICOLON       reduce using rule 21 (unification -> OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR COMPARISON OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR .)
+
+
+state 82
+
+    (17) new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT .
+
+    SEMICOLON       reduce using rule 17 (new_variable -> TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: reduce/reduce conflict in state 33 resolved using rule (functions -> main)
-WARNING: rejected rule (functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main) in state 33
-WARNING: Rule (functions -> FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR main) is never reduced
+WARNING: reduce/reduce conflict in state 33 resolved using rule (variables -> multispace VARIABLE)
+WARNING: rejected rule (variables -> <empty>) in state 33
+WARNING: reduce/reduce conflict in state 69 resolved using rule (variables -> multispace OPEN_CIRC_BR CONSTRUCT variables CLOSE_CIRC_BR)
+WARNING: rejected rule (variables -> <empty>) in state 69

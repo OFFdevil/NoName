@@ -98,13 +98,13 @@ def t_COMMENT_ONELINE(t):
     r'(?<=//)([^(\n)]|\\.)+(?=\n)'
     return t
 
+def t_STRING(t):
+    r'(?<=\")([^(\n)]|\\.)+(?=\")'
+    return t
+    
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
-    return t
-
-def t_STRING(t):
-    r'(?<=\")[A-Za-z0-9]+(?=\")'
     return t
 
 def t_FUNCTION_NAME(t):
@@ -145,4 +145,4 @@ def run_lex(file_name):
             break
         print(tok)
 
-run_lex(sys.argv[1])
+# run_lex(sys.argv[1])
