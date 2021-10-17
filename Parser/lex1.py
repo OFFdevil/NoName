@@ -3,7 +3,7 @@ import sys
 
 
 reserved = {
-    'main': 'START_MAIN',
+    'main': 'MAIN',
     'int': 'TYPE_INT',
     'string': 'TYPE_STRING',
     'def': 'FUNCTION_DEFINITION',
@@ -63,23 +63,23 @@ t_DOLLAR = r'\$'
 states = (
    ('body','exclusive'),
 )
- 
+
 def t_body(t):
-    r'\{'
+    r'(?<=\n\{)'
     t.lexer.code_start = t.lexer.lexpos        
     t.lexer.level = 1                          
-    t.lexer.begin('body')                     
+    t.lexer.begin('body')
  
 def t_body_lbrace(t):     
     r'\{'
     t.lexer.level +=1                
 
 def t_body_rbrace(t):
-    r'\}'
+    r'(?=\})'
     t.lexer.level -=1
  
     if t.lexer.level == 0:
-        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
+        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos]
         t.type = "BODY"
         t.lexer.lineno += t.value.count('\n')
         t.lexer.begin('INITIAL')           
@@ -145,4 +145,4 @@ def run_lex(file_name):
             break
         print(tok)
 
-# run_lex(sys.argv[1])
+run_lex(sys.argv[1])

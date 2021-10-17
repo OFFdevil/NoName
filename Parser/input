@@ -1,1 +1,23 @@
-    
+def FUNCk A
+{
+  aaaaaaaaaaaaaaaaaaaaaa
+}
+
+def FUNCb B
+{
+ 
+}
+
+def FUNCc C
+{
+
+}
+
+def FUNCd D
+{
+
+}
+
+main
+  FUNCd( A);
+  FUNCd( A);
