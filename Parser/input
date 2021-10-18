@@ -3,7 +3,7 @@ def FUNCk A
   aaaaaaaaaaaaaaaaaaaaaa
 }
 
-def FUNCb B
+def FUNCb A (struct A (struct B C)) E
 {
  
 }
@@ -21,3 +21,4 @@ def FUNCd D
 main
   FUNCd( A);
   FUNCd( A);
+  FUNCd( E),FUNCe( D);
