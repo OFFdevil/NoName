@@ -66,7 +66,7 @@ def p_functions_helper(p):
             print("Function: name=",p[3],"has already had parametr with this name!")
             break
     check_various_variables_name.clear()
-    # проверка на то, что структура 
+    # проверка на то, что ещё нет такой функции с таким набором параметров
     for i in range(0, len(main_program.functions)) :
         if ((main_program.functions[i].name == p[3]) & (main_program.functions[i].hash_parametrs == hash_parametrs_global)) :
             fuck_mission_failed()
@@ -86,7 +86,6 @@ def p_variables(p):
     global hash_parametrs_global, count
     if len(p) == 4 : 
         hash_parametrs_global = (hash_parametrs_global + count * simple_numeric_variable) % modul
-        check_various_variables_name.append(p[2])
     elif len(p) == 7 :
         hash_parametrs_global = (hash_parametrs_global * simple_numeric_struct) % modul
     count += 1
@@ -154,7 +153,7 @@ def p_main_functions(p):
 
 def p_call_functions(p):
     '''call_functions : FUNCTION_NAME OPEN_CIRC_BR parametrs CLOSE_CIRC_BR'''
-    global count_vertex
+    global count_vertex, hash_parametrs_global, count
     count_vertex += "1"
 
     graph.add_node(pydot.Node(count_vertex, label=p[1]))
@@ -163,6 +162,18 @@ def p_call_functions(p):
         stack.pop()
         graph.add_edge(pydot.Edge(count_vertex, first, color="black"))
     stack.append(count_vertex)
+    
+    
+    check = 0
+    for i in range(0, len(main_program.functions)) :
+        if((main_program.functions[i].name == p[1]) & (main_program.functions[i].hash_parametrs == hash_parametrs_global)) :
+            check = 1   
+            break       
+    if check == 0 :
+        fuck_mission_failed()
+        print("Function: name=",p[1],"didn't create with this parametrs!")
+    hash_parametrs_global = 1
+    count = 1      
 
 def p_parametrs(p):
     '''parametrs : multispace OPEN_CIRC_BR CONSTRUCT parametrs CLOSE_CIRC_BR parametrs
@@ -173,6 +184,14 @@ def p_parametrs(p):
     global count_vertex 
     count_vertex += "1"
     variable_is_declared = 0
+
+    global hash_parametrs_global, count
+    if len(p) == 4 : 
+        hash_parametrs_global = (hash_parametrs_global + count * simple_numeric_variable) % modul
+        check_various_variables_name.append(p[2])
+    elif len(p) == 7 :
+        hash_parametrs_global = (hash_parametrs_global * simple_numeric_struct) % modul
+    count += 1
 
     # проверка, что данная переменная уже объявлена
     if len(p) == 4 :
