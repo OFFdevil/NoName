@@ -52,11 +52,11 @@ precedence = (
 start = 'functions'
 
 def p_functions(p):
-    '''functions : main
-                 | functions_helper functions'''
+    '''functions : comment_or_empty main
+                 | comment_or_empty functions_helper comment_or_empty functions'''
 
 def p_functions_helper(p):
-    '''functions_helper : FUNCTION_DEFINITION multispace FUNCTION_NAME variables OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR'''
+    '''functions_helper : FUNCTION_DEFINITION multispace FUNCTION_NAME variables comment_or_empty OPEN_SHAPED_BR BODY CLOSE_SHAPED_BR'''
     global hash_parametrs_global, count
     # тут проверяем, что все параметры имеют разное имя
     check_various_variables_name.sort()
@@ -92,7 +92,7 @@ def p_variables(p):
     count += 1
 
 def p_main(p):
-    ''' main : MAIN or_and'''
+    ''' main : MAIN comment_or_empty or_and'''
     global count_vertex
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label="MAIN"))
@@ -103,18 +103,18 @@ def p_main(p):
         
 
 def p_or_and(p):
-    '''or_and : multispace main_functions LOGICAL_OR main_functions SEMICOLON or_and
-              | multispace main_functions SEMICOLON or_and
-              | '''
+    '''or_and : multispace main_functions LOGICAL_OR main_functions SEMICOLON comment_or_empty or_and
+              | multispace main_functions SEMICOLON comment_or_empty or_and
+              | comment_or_empty'''
     # тут походу нужно вызывать одну из двух фукнци, если logacal_or -> точнее сохранять только одну
     global count_vertex
     count_vertex += "1"
-    if len(p) == 7 :
+    if len(p) == 8 :
         graph.add_node(pydot.Node(count_vertex, label="LOGICAL_OR"))
-        first = stack[-p[6] - 1]
-        del stack[-p[6] - 1]
-        second = stack[-p[6] - 1]
-        del stack[-p[6] - 1]
+        first = stack[-p[7] - 1]
+        del stack[-p[7] - 1]
+        second = stack[-p[7] - 1]
+        del stack[-p[7] - 1]
         rand1 = randint(0,9) % 2
         rand2 = randint(0,9) % 2
         # вот тут я немножко рандомчика добавил)
@@ -137,12 +137,12 @@ def p_or_and(p):
             graph.add_edge(pydot.Edge(count_vertex, second, color="red"))
         stack.append(count_vertex)
     
-    if len(p) == 1 :
+    if len(p) == 2 :
         p[0] = 0
-    elif len(p) == 5 :
-        p[0] = 1 + p[4]
+    elif len(p) == 6 :
+        p[0] = 1 + p[5]
     else :
-        p[0] = 1 + p[6]
+        p[0] = 1 + p[7]
 
 
 def p_main_functions(p):
@@ -295,6 +295,13 @@ def p_change_variable(p):
     graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-2],color="brown"))
     stack.append(count_vertex)
 
+
+def p_comment_or_empty(p):
+    '''comment_or_empty : DIVIDE DIVIDE COMMENT_ONELINE comment_or_empty
+                        | DIVIDE DIVIDE comment_or_empty
+                        | '''
+    pass
+
 def p_multispace(p):
     '''multispace : SPACE multispace
                   | SPACE'''
@@ -302,6 +309,12 @@ def p_multispace(p):
         p[0] = 1 + p[2]
     else:
         p[0] = 1
+
+# переделать, хорошо бы, если можно было ещё пробелы перед // ставить. Идеи: ставить вместо пробелов "_" будет нормально работать, но выглядеть...хм, а кому это важно)
+# def p_comment_space(p):
+#     '''comment_space : SPACE comment_space
+#                      | '''
+#     pass
 
 def p_error(p):
   print("Syntax error", p)
