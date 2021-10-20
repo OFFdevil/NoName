@@ -223,6 +223,7 @@ def p_parametrs(p):
     elif len(p) == 1 :
         p[0] = 0
 
+
         
 
 def p_new_variable(p):
@@ -381,7 +382,7 @@ def delete_variables():
     for i in range(0, len(main_program.variables)) : # находим переменные, которые нужно удалить
         if(spaces < main_program.variables[i].visibility) :
             deleting.append(i)
-    for i in range(0, len(deleting)) :
+    for i in range(1, len(deleting) + 1) :
         del main_program.variables[deleting[-i]] # удаляем элементы с конца, чтобы не менялся index
 
 
