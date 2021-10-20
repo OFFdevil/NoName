@@ -1,0 +1,8 @@
+def FUNCa (struct A)
+{
+    // body
+}
+
+main
+    int A:=123;
+  FUNCa( (struct A));

@@ -1,0 +1,7 @@
+def FUNCa A A
+{
+    // body
+}
+
+main
+  int A:=123;

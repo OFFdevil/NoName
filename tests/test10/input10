@@ -1,0 +1,4 @@
+main // bad
+  int X:=123;    // bad
+// bad
+  int Y:=123;
