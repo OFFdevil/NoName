@@ -15,10 +15,6 @@ class Variable:
         self.name = name_
         self.visibility = visibility_
 
-class Structurs:
-    def __init__(self, variables_):
-        self.variables = []
-
 class Function:
     def __init__(self, name_, hash_parametrs_, body_):
         self.name = name_
@@ -39,6 +35,7 @@ simple_numeric_struct = 83
 simple_numeric_variable = 883
 hash_parametrs_global = 1
 count = 1
+spaces = 0
 
 check_various_variables_name = []
 stack = []
@@ -90,6 +87,9 @@ def p_variables(p):
         hash_parametrs_global = (hash_parametrs_global * simple_numeric_struct) % modul
     count += 1
 
+
+
+
 def p_main(p):
     ''' main : MAIN comment_or_empty or_and'''
     global count_vertex
@@ -102,8 +102,8 @@ def p_main(p):
         
 
 def p_or_and(p):
-    '''or_and : multispace main_functions LOGICAL_OR main_functions SEMICOLON comment_or_empty or_and
-              | multispace main_functions SEMICOLON comment_or_empty or_and
+    '''or_and : space_for_functions main_functions LOGICAL_OR main_functions SEMICOLON comment_or_empty or_and
+              | space_for_functions main_functions SEMICOLON comment_or_empty or_and
               | comment_or_empty'''
     # тут походу нужно вызывать одну из двух фукнци, если logacal_or -> точнее сохранять только одну
     global count_vertex
@@ -149,10 +149,13 @@ def p_main_functions(p):
                       | new_variable
                       | unification
                       | change_variable'''
-
+    ###########
+    delete_variables() # удаляем ненужные элементы
+    ###########   
 
 def p_call_functions(p):
     '''call_functions : FUNCTION_NAME OPEN_CIRC_BR parametrs CLOSE_CIRC_BR'''
+    
     global count_vertex, hash_parametrs_global, count
     count_vertex += "1"
 
@@ -179,8 +182,9 @@ def p_parametrs(p):
     '''parametrs : multispace OPEN_CIRC_BR CONSTRUCT parametrs CLOSE_CIRC_BR parametrs
                  | multispace VARIABLE parametrs
                  | ''' # смотреть сюда, если недоумеваете, почему поставили пробел после названии функции и всё поламалось!
-    # кажется можно удалить следующие строчки  multispace OPEN_CIRC_BR COUNSTRUCT parametrs CLOSE_CIRC_BR
-    #                                          multispace VARIABLE parametrs
+    ###########
+    delete_variables() # удаляем ненужные элементы
+    ###########         
     global count_vertex 
     count_vertex += "1"
     variable_is_declared = 0
@@ -196,13 +200,13 @@ def p_parametrs(p):
     # проверка, что данная переменная уже объявлена
     if len(p) == 4 :
         for i in range(0,len(main_program.variables)):
-            if p[2] == main_program.variables[i] :
+            if p[2] == main_program.variables[i].name :
                 variable_is_declared = 1
                 break
 
         if variable_is_declared == 0 :
             fuck_mission_failed()
-            print("Variable",p[2]," doesn't exist")
+            print("Variable",p[2],"doesn't exist")
 
     if len(p) == 7 :
         graph.add_node(pydot.Node(count_vertex, label="struct"))
@@ -224,18 +228,21 @@ def p_parametrs(p):
 def p_new_variable(p):
     '''new_variable : TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
                     | TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT'''
+    ###########
+    delete_variables() # удаляем ненужные элементы
+    ###########       
+    
     global count_vertex
-
     # проверка, что данная переменная уже объявлена
     variable_is_declared = 0
     for i in range(0,len(main_program.variables)):
-       if p[3] == main_program.variables[i] :
+       if p[3] == main_program.variables[i]:
             variable_is_declared = 1
             break
 
     if variable_is_declared == 1 :
         fuck_mission_failed()
-        print("Variable",p[3]," has already existed!")
+        print("Variable",p[3],"has already existed!")
 
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label=p[3]))
@@ -251,7 +258,10 @@ def p_new_variable(p):
     stack.append(count_vertex)
 
     # добавляем переменную
-    main_program.variables.append(p[3])
+    if len(p) == 6 :
+        main_program.variables.append(Variable("int", p[3], spaces))
+    else :
+        main_program.variables.append(Variable("string", p[3], spaces))
 
 
 def p_unification(p):
@@ -259,19 +269,31 @@ def p_unification(p):
                    | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     OR          OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
                    | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     XOR         OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
                    | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     COMPARISON  OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR'''
+    ###########
+    delete_variables() # удаляем ненужные элементы
+    ###########   
+    
     # тут нужно проверять, что вообще есть такая переменная, а потом вызывать сравнение
     global count_vertex
 
-    # проверка, что данная переменная уже объявлена
-    variable_is_declared = 0
+    # проверка, что каждая переменная существует переменная уже объявлена
+    variable_is_declared = [0,0]
     for i in range(0,len(main_program.variables)):
-       if p[2] == main_program.variables[i] :
-            variable_is_declared = 1
+       if p[2] == main_program.variables[i].name :
+            variable_is_declared[0] = 1
+            break
+    for i in range(0,len(main_program.variables)):
+       if p[6] == main_program.variables[i].name :
+            variable_is_declared[1] = 1
             break
 
-    if variable_is_declared == 0 :
+    if variable_is_declared[0] == 0:
         fuck_mission_failed()
-        print("Variable",p[2]," doesn't exist")
+        print("Variable",p[2],"doesn't exist")
+
+    if variable_is_declared[1] == 0:
+        fuck_mission_failed()
+        print("Variable",p[6],"doesn't exist")
     
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label=p[2]))
@@ -288,8 +310,12 @@ def p_change_variable(p):
     '''change_variable : DOLLAR VARIABLE EQUAL NUMBER
                        | DOLLAR VARIABLE EQUAL QUOT STRING QUOT
                        | DOLLAR VARIABLE EQUAL VARIABLE'''
+    ###########
+    delete_variables() # удаляем ненужные элементы
+    ###########   
+    
     global count_vertex
-
+    
     # проверка, что данная переменная уже объявлена
     variable_is_declared = 0
     for i in range(0,len(main_program.variables)):
@@ -299,7 +325,7 @@ def p_change_variable(p):
 
     if variable_is_declared == 0:
         fuck_mission_failed()
-        print("Variable",p[2]," doesn't exist")
+        print("Variable",p[2],"doesn't exist")
 
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label=p[2]))
@@ -321,6 +347,16 @@ def p_comment_or_empty(p):
                         | '''
     pass
 
+def p_space_for_functions(p):
+    '''space_for_functions : SPACE multispace
+                           | SPACE'''
+    global spaces
+    if len(p) == 3 :
+        p[0] = 1 + p[2]
+    else:
+        p[0] = 1
+    spaces = p[0]
+
 def p_multispace(p):
     '''multispace : SPACE multispace
                   | SPACE'''
@@ -338,6 +374,16 @@ def p_multispace(p):
 def p_error(p):
   print("Syntax error", p)
   fuck_mission_failed()
+
+def delete_variables():
+    # тут мы будем удалять переменные, у которых слишком много пробелов
+    deleting = [] # массив удаляемых элементов
+    for i in range(0, len(main_program.variables)) : # находим переменные, которые нужно удалить
+        if(spaces < main_program.variables[i].visibility) :
+            deleting.append(i)
+    for i in range(0, len(deleting)) :
+        del main_program.variables[deleting[-i]] # удаляем элементы с конца, чтобы не менялся index
+
 
 
 def fuck_mission_failed(): # уже ошибка есть, значит синтаксическое дерево не нужно строить
