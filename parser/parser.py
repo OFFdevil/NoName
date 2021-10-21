@@ -9,12 +9,6 @@ from lex import tokens, run_lex
 graph = pydot.Dot("my_graph", graph_type="graph", bgcolor = "white")
 draw_picture = 1
 
-class Variable:
-    def __init__(self, type_, name_, visibility_):
-        self.type = type_
-        self.name = name_
-        self.visibility = visibility_
-
 class Function:
     def __init__(self, name_, hash_parametrs_, body_):
         self.name = name_
@@ -24,7 +18,6 @@ class Function:
 
 class Program: 
     def __init__(self):
-        self.variables = []
         self.functions = []
 
 ##############################
@@ -99,8 +92,7 @@ def p_main(p):
     global count_vertex
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label="MAIN"))
-    size = len(stack)
-    for i in range(0, size) :
+    for i in range(0, len(stack)) :
         graph.add_edge(pydot.Edge(count_vertex, stack[-1], color="blue", dir="forward"))
         stack.pop()
         
@@ -150,12 +142,7 @@ def p_or_and(p):
 
 def p_main_functions(p):
     '''main_functions : call_functions
-                      | new_variable
-                      | unification
-                      | change_variable'''
-    ###########
-    delete_variables() # удаляем ненужные элементы
-    ###########   
+                      | unification'''
 
 def p_call_functions(p):
     '''call_functions : FUNCTION_NAME OPEN_CIRC_BR parametrs CLOSE_CIRC_BR'''
@@ -164,12 +151,14 @@ def p_call_functions(p):
     count_vertex += "1"
 
     graph.add_node(pydot.Node(count_vertex, label=p[1]))
-    for i in range(0, p[3]) :
-        first = stack[-1]
-        stack.pop()
-        graph.add_edge(pydot.Edge(count_vertex, first, color="black"))
+    strstr = ""
+    for i in range(0, len(p[3])) :
+        if (p[3][i] == "|"):
+            graph.add_edge(pydot.Edge(count_vertex, strstr, color="green"))
+            strstr = ""
+        else :
+            strstr += p[3][i]
     stack.append(count_vertex)
-    
     
     check = 0
     for i in range(0, len(main_program.functions)) :
@@ -185,169 +174,95 @@ def p_call_functions(p):
 def p_parametrs(p):
     '''parametrs : multispace OPEN_CIRC_BR CONSTRUCT parametrs CLOSE_CIRC_BR parametrs
                  | multispace VARIABLE parametrs
-                 | ''' # смотреть сюда, если недоумеваете, почему поставили пробел после названии функции и всё поламалось!
-    ###########
-    delete_variables() # удаляем ненужные элементы
-    ###########         
+                 | ''' # смотреть сюда, если недоумеваете, почему поставили пробел после названии функции и всё поламалось!    
     global count_vertex 
     count_vertex += "1"
-    variable_is_declared = 0
 
     global hash_parametrs_global, count
     if len(p) == 4 : 
         hash_parametrs_global = (hash_parametrs_global + count * simple_numeric_variable) % modul
-        check_various_variables_name.append(p[2])
     elif len(p) == 7 :
         hash_parametrs_global = (hash_parametrs_global * simple_numeric_struct) % modul
     count += 1
 
-    # проверка, что данная переменная уже объявлена
-    if len(p) == 4 :
-        for i in range(0,len(main_program.variables)):
-            if p[2] == main_program.variables[i].name :
-                variable_is_declared = 1
-                break
-
-        if variable_is_declared == 0 :
-            fuck_mission_failed()
-            print("Variable",p[2],"doesn't exist")
-
     if len(p) == 7 :
         graph.add_node(pydot.Node(count_vertex, label="struct"))
-        for i in range(0, p[4]) :
-            first = stack[-1]
-            stack.pop()
-            graph.add_edge(pydot.Edge(count_vertex, first, color="green"))
-        stack.append(count_vertex)
-        p[0] = 1 + p[6]
+        strstr = ""
+        for i in range(0, len(p[4])) :
+            if (p[4][i] == "|"):
+                graph.add_edge(pydot.Edge(count_vertex, strstr, color="green"))
+                strstr = ""
+            else :
+                strstr += p[4][i]
+        p[0] = count_vertex + "|" + str(p[6])
     elif len(p) == 4 : 
         graph.add_node(pydot.Node(count_vertex, label=p[2]))
-        stack.append(count_vertex)
-        p[0] = 1 + p[3]
+        p[0] = count_vertex + "|" + str(p[3])
     elif len(p) == 1 :
-        p[0] = 0
-
-
-        
-
-def p_new_variable(p):
-    '''new_variable : TYPE_INT multispace VARIABLE OPERATOR_ASSIGNMENT NUMBER
-                    | TYPE_STRING multispace VARIABLE OPERATOR_ASSIGNMENT QUOT STRING QUOT'''
-    ###########
-    delete_variables() # удаляем ненужные элементы
-    ###########       
+        p[0] = ""    
     
-    global count_vertex
-    # проверка, что данная переменная уже объявлена
-    variable_is_declared = 0
-    for i in range(0,len(main_program.variables)):
-       if p[3] == main_program.variables[i].name:
-            variable_is_declared = 1
-            break
-
-    if variable_is_declared == 1 :
-        fuck_mission_failed()
-        print("Variable",p[3],"has already existed!")
-
-    count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[3]))
-    count_vertex += "1"
-    if len(p) == 6 :
-        graph.add_node(pydot.Node(count_vertex, label=p[5]))
-    else :
-        graph.add_node(pydot.Node(count_vertex, label=p[6]))
-    count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[4]))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-1],color="orange"))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-2],color="orange"))
-    stack.append(count_vertex)
-
-    # добавляем переменную
-    if len(p) == 6 :
-        main_program.variables.append(Variable("int", p[3], spaces))
-    else :
-        main_program.variables.append(Variable("string", p[3], spaces))
 
 
 def p_unification(p):
-    '''unification : OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     AND         OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
-                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     OR          OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
-                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     XOR         OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR
-                   | OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR     COMPARISON  OPEN_CIRC_BR VARIABLE CLOSE_CIRC_BR'''
-    ###########
-    delete_variables() # удаляем ненужные элементы
-    ###########   
+    '''unification : OPEN_CIRC_BR atom CLOSE_CIRC_BR     AND         OPEN_CIRC_BR atom CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR atom CLOSE_CIRC_BR     OR          OPEN_CIRC_BR atom CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR atom CLOSE_CIRC_BR     XOR         OPEN_CIRC_BR atom CLOSE_CIRC_BR
+                   | OPEN_CIRC_BR atom CLOSE_CIRC_BR     COMPARISON  OPEN_CIRC_BR atom CLOSE_CIRC_BR'''
     
-    # тут нужно проверять, что вообще есть такая переменная, а потом вызывать сравнение
     global count_vertex
-
-    # проверка, что каждая переменная существует переменная уже объявлена
-    variable_is_declared = [0,0]
-    for i in range(0,len(main_program.variables)):
-       if p[2] == main_program.variables[i].name :
-            variable_is_declared[0] = 1
-            break
-    for i in range(0,len(main_program.variables)):
-       if p[6] == main_program.variables[i].name :
-            variable_is_declared[1] = 1
-            break
-
-    if variable_is_declared[0] == 0:
-        fuck_mission_failed()
-        print("Variable",p[2],"doesn't exist")
-
-    if variable_is_declared[1] == 0:
-        fuck_mission_failed()
-        print("Variable",p[6],"doesn't exist")
     
-    count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[2]))
-    count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[6]))
     count_vertex += "1"
     graph.add_node(pydot.Node(count_vertex, label=p[4]))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-1],color="purple"))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-2],color="purple"))
+    graph.add_edge(pydot.Edge(count_vertex, p[2],color="purple"))
+    graph.add_edge(pydot.Edge(count_vertex, p[6],color="purple"))
     stack.append(count_vertex)
 
-
-def p_change_variable(p):
-    '''change_variable : DOLLAR VARIABLE EQUAL NUMBER
-                       | DOLLAR VARIABLE EQUAL QUOT STRING QUOT
-                       | DOLLAR VARIABLE EQUAL VARIABLE'''
-    ###########
-    delete_variables() # удаляем ненужные элементы
-    ###########   
-    
+def p_atom(p):
+    '''atom : OPEN_CIRC_BR CONSTRUCT atom_struct CLOSE_CIRC_BR
+            | VARIABLE'''
     global count_vertex
-    
-    # проверка, что данная переменная уже объявлена
-    variable_is_declared = 0
-    for i in range(0,len(main_program.variables)):
-       if p[2] == main_program.variables[i].name :
-            variable_is_declared = 1
-            break
-
-    if variable_is_declared == 0:
-        fuck_mission_failed()
-        print("Variable",p[2],"doesn't exist")
-
     count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[2]))
-    count_vertex += "1"
-    if len(p) == 7 :
-        graph.add_node(pydot.Node(count_vertex, label=p[5]))
+    if len(p) == 2 :
+        graph.add_node(pydot.Node(count_vertex, label=p[1]))
     else :
-        graph.add_node(pydot.Node(count_vertex, label=p[4]))
-    count_vertex += "1"
-    graph.add_node(pydot.Node(count_vertex, label=p[3]))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-1],color="brown"))
-    graph.add_edge(pydot.Edge(count_vertex, count_vertex[0:-2],color="brown"))
-    stack.append(count_vertex)
+        graph.add_node(pydot.Node(count_vertex, label="struct"))
+        strstr = ""
+        for i in range(0, len(p[3])) :
+            if (p[3][i] == "|"):
+                graph.add_edge(pydot.Edge(count_vertex, strstr, color="green"))
+                strstr = ""
+            else :
+                strstr += p[3][i]
+    p[0] = count_vertex
+    
 
+    p[0] = count_vertex # название вершины передаю
+
+def p_atom_struct(p):
+    '''atom_struct : multispace OPEN_CIRC_BR CONSTRUCT atom_struct CLOSE_CIRC_BR atom_struct
+                   | multispace VARIABLE atom_struct
+                   |'''
+    global count_vertex 
+    count_vertex += "1"
+    
+    if len(p) == 7 :
+        graph.add_node(pydot.Node(count_vertex, label="struct"))
+        strstr = ""
+        for i in range(0, len(p[4])) :
+            if (p[4][i] == "|"):
+                graph.add_edge(pydot.Edge(count_vertex, strstr, color="green"))
+                strstr = ""
+            else :
+                strstr += p[4][i]
+        p[0] = count_vertex + "|" + str(p[6])
+    elif len(p) == 4 : 
+        graph.add_node(pydot.Node(count_vertex, label=p[2]))
+        p[0] = count_vertex + "|" + str(p[3])
+    elif len(p) == 1 :
+        p[0] = ""  
 
 def p_comment_or_empty(p):
-    '''comment_or_empty : DIVIDE DIVIDE COMMENT_ONELINE comment_or_empty
+    '''comment_or_empty : DIVIDE DIVIDE COMMENT_ONE_LINE comment_or_empty
                         | DIVIDE DIVIDE comment_or_empty
                         | '''
     pass
@@ -373,15 +288,6 @@ def p_multispace(p):
 def p_error(p):
   print("Syntax error", p)
   fuck_mission_failed()
-
-def delete_variables():
-    # тут мы будем удалять переменные, у которых слишком много пробелов
-    deleting = [] # массив удаляемых элементов
-    for i in range(0, len(main_program.variables)) : # находим переменные, которые нужно удалить
-        if(spaces < main_program.variables[i].visibility) :
-            deleting.append(i)
-    for i in range(1, len(deleting) + 1) :
-        del main_program.variables[deleting[-i]] # удаляем элементы с конца, чтобы не менялся index
 
 def fuck_mission_failed(): # уже ошибка есть, значит синтаксическое дерево не нужно строить
     global draw_picture

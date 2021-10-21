@@ -12,7 +12,7 @@ reserved = {
 
 tokens = [
              'BODY',
-             'COMMENT_ONELINE',
+             'COMMENT_ONE_LINE',
              'NUMBER',
              'STRING',
              'FUNCTION',
@@ -37,7 +37,6 @@ tokens = [
              'QUOT',
              'SEMICOLON',
              'LOGICAL_OR',
-             'COMMENT_ONE_LINE',
              'DOLLAR'
          ] + list(reserved.values())
 
@@ -94,7 +93,7 @@ def t_body_error(t):
     t.lexer.skip(1)
 
 
-def t_COMMENT_ONELINE(t):
+def t_COMMENT_ONE_LINE(t):
     r'(?<=//)([^(\n)]|\\.)+(?=\n)'
     return t
 
