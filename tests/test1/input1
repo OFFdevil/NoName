@@ -1,3 +1,2 @@
 main
-  int A:=123;
-  int A:=1222;
+  FUNCa( (struct A));

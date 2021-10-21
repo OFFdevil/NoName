@@ -1,8 +1,12 @@
 def FUNCa A
 {
-    // body
+    // body 1
+}
+
+def FUNCa A
+{
+    // body 2
 }
 
 main
-  int A:=123;
-  FUNCa( (struct A));
+  (A)&&(A);

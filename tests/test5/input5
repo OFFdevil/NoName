@@ -1,8 +1,4 @@
-def FUNCa (struct A)
-{
-    // body
-}
-
-main
-    int A:=123;
-  FUNCa( (struct A));
+main // bad
+  (A)&&(B);    // bad
+ // bad
+  (A)^((struct A));

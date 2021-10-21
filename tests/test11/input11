@@ -1,4 +1,28 @@
-main// good
-  int X:=123;//     good
-// good
-  int Y:=123;
+// FIRST line!
+def FUNCa A (struct B (struct C (struct D (struct E))))
+{
+    // body 
+}
+
+// HELLO!
+
+def FUNCb A B//comment 
+{
+    // body
+}//FUNCb
+
+def FUNCd A B C D E F
+{
+    // body
+}
+
+def FUNCeee (struct A) (struct (struct B)) (struct (struct (struct C))) (struct (struct (struct (struct D))))
+{
+    // body
+}
+
+main
+  FUNCb( A F);
+  FUNCa( A (struct B (struct C (struct D (struct E)))));
+  FUNCd( A A A A A A);
+  FUNCeee( (struct A) (struct (struct B)) (struct (struct (struct C))) (struct (struct (struct (struct D)))));

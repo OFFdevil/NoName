@@ -1,1 +1,2 @@
-Variable A doesn't exist
+Syntax error LexToken(DIVIDE,'/',1,5)
+Syntax error LexToken(SPACE,' ',4,43)

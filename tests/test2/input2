@@ -1,3 +1,7 @@
+def FUNCa A
+{
+    // body
+}
+
 main
-  int A:=123;
-    int A:=123;
+  FUNCa( (struct A));

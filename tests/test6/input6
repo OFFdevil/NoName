@@ -1,3 +1,4 @@
-main
-  int A:=123;
-  FUNCa( (struct A));
+main// good
+  (A)&&(B);// good
+// good
+  (A)^((struct A));
