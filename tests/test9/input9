@@ -1,34 +1,21 @@
-// 123123
-
-def FUNCk A
-{ 
-  aaaaaaaaaaaaaaaaaaaaaa
-}// 1231231231
-
-// -----------
-// u2ofds.nflsjdf;ja sec
-
-def FUNCb A (struct D (struct B C)) E
+def FUNCa A
 {
- 
+    // body
 }
 
-def FUNCc C
+def FUNCa (struct A)
 {
-
+    // body
 }
 
-def FUNCd D
-{
-
-}
-
-def FUNCe D
-{
-
-}
-
-main// hello
-  (C)&&(C);
-  FUNCd( A);
-  FUNCb( A (struct A (struct A A)) A),((struct A (struct B (struct C (struct E)))))==((struct A B C D E F));
+main
+  FUNCa( C),FUNCa( (struct D));
+    FUNCa( A);
+    FUNCa( C);
+     FUNCa( B);
+  FUNCa( F),FUNCa( E);
+    FUNCa( A);
+     FUNCa( E);
+      FUNCa( Z);
+ FUNCc( B);
+ FUNCa( C);

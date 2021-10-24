@@ -1,12 +1,28 @@
-def FUNCa A
+// FIRST line!
+def FUNCa A (struct B (struct C (struct D (struct E))))
 {
-    // body 1
+    // body 
 }
 
-def FUNCa A
+// HELLO!
+
+def FUNCb A B//comment 
 {
-    // body 2
+    // body
+}//FUNCb
+
+def FUNCd A B C D E F
+{
+    // body
+}
+
+def FUNCeee (struct A) (struct (struct B)) (struct (struct (struct C))) (struct (struct (struct (struct D))))
+{
+    // body
 }
 
 main
-  (A)&&(A);
+  FUNCb( A F);
+     FUNCa( A (struct B (struct C (struct D (struct E)))));
+      FUNCd( A A A A A A);
+     FUNCeee( (struct A) (struct (struct B)) (struct (struct (struct C))) (struct (struct (struct (struct D)))));

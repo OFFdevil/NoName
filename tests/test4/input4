@@ -1,12 +1,4 @@
-def FUNCa A
-{
-    // body
-}
-
-def FUNCa (struct A)
-{
-    // body
-}
-
-main
-  FUNCa( A),FUNCa( (struct A));
+main// good
+  (A)==(B);// good
+// good
+  (A)==((struct A));

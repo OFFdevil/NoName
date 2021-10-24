@@ -1,2 +1,13 @@
+def FUNCa A
+{
+    // body
+}
+
+def FUNCa (struct A)
+{
+    // body
+}
+
 main
-  FUNCa( (struct A));
+  FUNCa( A);
+   FUNCa( (struct A));

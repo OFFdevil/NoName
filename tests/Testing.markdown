@@ -5,19 +5,15 @@
 
 Что нужно было протестировать:
 1. Использование функций:
-   1. <code>[TEST 1](tests/../test1/input1.out)</code>: Нельзя вызывать функции, которые не определены
-   2. <code>[TEST 2](tests/../test2/input2.out)</code>: Нельзя вызывать функцию, перегрузка от какого-либо количества переменных не определено(функция определена для двух параметров, а вызывается от трёх)
-   3. <code>[TEST 3](tests/../test3/input3.png)</code>: Использовании функций от разного количества параметров
+   1. <code>[TEST 1](tests/../test1/input1.png)</code>: Использовании функций от разного количества параметров
 2. Использование `LOGICAL_OR`:
-   1. <code>[TEST 4](tests/../test4/input4.png)</code>: Пример использования
+   1. <code>[TEST 2](tests/../test2/input2.png)</code>: Пример использования
 3. Использование комментариев:
-   1. <code>[TEST 5](tests/../test5/input5.out)</code>: Пример плохого использования комментариев
-   2. <code>[TEST 6](tests/../test6/input6.png)</code>: Пример хорошего использования комментариев
-4. Определение функций:
-   1. <code>[TEST 7](tests/../test7/input7.out)</code>: Функция от одинакового количества параметров не может быть определана несколько раз
-   2. <code>[TEST 8](tests/../test8/input8.out)</code>: Функция не может иметь параметры с одинаковым именем
-5. Некоторые примеры "хорошо" написаного кода:
-   1. <code>[TEST 9](tests/../test9/input9.png)</code>
-   2. <code>[TEST 10](tests/../test10/input10.png)</code>
-   3. <code>[TEST 11](tests/../test11/input11.png)</code>
-   4. <code>[TEST 12](tests/../test12/input12.png)</code>
+   1. <code>[TEST 3](tests/../test3/input3.out)</code>: Пример плохого использования комментариев
+   2. <code>[TEST 4](tests/../test4/input4.png)</code>: Пример хорошего использования комментариев
+4. Некоторые примеры "хорошо" написаного кода:
+   1. <code>[TEST 5](tests/../test5/input5.png)</code>
+   2. <code>[TEST 6](tests/../test6/input6.png)</code>
+   3. <code>[TEST 7](tests/../test7/input7.png)</code>
+   4. <code>[TEST 8](tests/../test8/input8.png)</code>
+   5. <code>[TEST 9](tests/../test9/input9.png)</code>

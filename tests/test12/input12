@@ -1,8 +1,0 @@
-def FUNCa (struct (struct (struct (struct (struct (struct G) F) E) D) C) B) A
-{
-    // body 
-}
-
-main
-  FUNCa( (struct (struct (struct (struct (struct (struct A) A) A) A) A) A) A);
-  ((struct (struct A) (struct B) (struct C)))&&((struct A (struct B (struct C (struct D E F G) D E F G) C D E F G) B C D E F G));

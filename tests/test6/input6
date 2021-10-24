@@ -1,4 +1,8 @@
-main// good
-  (A)&&(B);// good
-// good
-  (A)^((struct A));
+def FUNCa (struct (struct (struct (struct (struct (struct G) F) E) D) C) B) A
+{
+    // body 
+}
+
+main
+  FUNCa( (struct (struct (struct (struct (struct (struct A) A) A) A) A) A) A);
+  ((struct A Aa Ab Ac Ae Af))==((struct A (struct B (struct C (struct D E F G) D E F G) C D E F G) B C D E F G));

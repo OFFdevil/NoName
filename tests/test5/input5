@@ -1,4 +1,34 @@
-main // bad
-  (A)&&(B);    // bad
- // bad
-  (A)^((struct A));
+// 123123
+
+def FUNCk A
+{ 
+  aaaaaaaaaaaaaaaaaaaaaa
+}// 1231231231
+
+// -----------
+// u2ofds.nflsjdf;ja sec
+
+def FUNCb A (struct D (struct B C)) E
+{
+ 
+}
+
+def FUNCc C
+{
+
+}
+
+def FUNCd D
+{
+
+}
+
+def FUNCe D
+{
+
+}
+
+main// hello
+  (C)==(C);
+  FUNCd( A);
+  FUNCe( A (struct A (struct A A)) A),((struct A (struct B (struct C (struct E)))))==((struct A B C D E F));
