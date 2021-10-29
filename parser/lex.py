@@ -12,6 +12,7 @@ reserved = {
 
 tokens = [
              'BODY',
+             'CBODY',
              'COMMENT_ONE_LINE',
              'NUMBER',
              'STRING',
@@ -40,27 +41,10 @@ tokens = [
              'DOLLAR'
          ] + list(reserved.values())
 
-t_OPERATOR_ASSIGNMENT = r'\:='
-t_DIVIDE = r'\/'
-t_OPEN_CIRC_BR = r'\('
-t_CLOSE_CIRC_BR = r'\)'
-t_OPEN_SHAPED_BR = r'\{'
-t_CLOSE_SHAPED_BR = r'\}'   
-t_COMPARISON = r'\=\='
-t_NOT = r'\!'
-t_AND = r'\&&'
-t_OR = r'\|\|'
-t_XOR = r'\^'
-t_COLON = r'\:'
-t_SPACE = r'\s' 
-t_EQUAL = r'\='
-t_QUOT = r'\"'
-t_SEMICOLON = r'\;'
-t_LOGICAL_OR = r'\,'
-t_DOLLAR = r'\$'
-
+    
 states = (
    ('body','exclusive'),
+   ('cbody','exclusive'),
 )
 
 def t_body(t):
@@ -91,6 +75,68 @@ t_body_ignore = "\t"
  
 def t_body_error(t):
     t.lexer.skip(1)
+
+
+
+def t_cbody(t):
+    r'\['
+    t.lexer.code_start = t.lexer.lexpos        
+    t.lexer.level = 1                          
+    t.lexer.begin('cbody')
+ 
+def t_cbody_open(t):       
+    r'\['
+    t.lexer.level +=1                
+
+def t_cbody_closed(t):
+    r'\]'
+    t.lexer.level -=1
+ 
+    if t.lexer.level == 0:
+        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
+        t.type = "CBODY"
+        t.lexer.lineno += t.value.count('\n')
+        t.lexer.begin('INITIAL')           
+        pass
+
+def t_cbody_all(t):
+    r'[^(\[|\])]+'
+ 
+t_cbody_ignore = "\t"
+
+def t_cbody_error(t):
+    t.lexer.skip(1)
+
+
+
+
+
+t_OPERATOR_ASSIGNMENT = r'\:='
+t_DIVIDE = r'\/'
+t_OPEN_CIRC_BR = r'\('
+t_CLOSE_CIRC_BR = r'\)'
+t_OPEN_SHAPED_BR = r'\{'
+t_CLOSE_SHAPED_BR = r'\}'   
+t_COMPARISON = r'\=\='
+t_NOT = r'\!'
+t_AND = r'\&&'
+t_OR = r'\|\|'
+t_XOR = r'\^'
+t_COLON = r'\:'
+t_SPACE = r'\s' 
+t_EQUAL = r'\='
+t_QUOT = r'\"'
+t_SEMICOLON = r'\;'
+t_LOGICAL_OR = r'\,'
+t_DOLLAR = r'\$'
+
+
+
+
+
+
+
+
 
 
 def t_COMMENT_ONE_LINE(t):
@@ -144,4 +190,4 @@ def run_lex(file_name):
             break
         print(tok)
 
-# run_lex(sys.argv[1])
+run_lex(sys.argv[1])

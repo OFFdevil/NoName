@@ -1,0 +1,101 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "zxclang",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#digits"
+		},
+		{
+			"include": "#comment_line"
+		},
+		{
+			"include": "#comment_block"
+		},
+		{
+			"include": "#other"
+		},
+		{
+			"include": "#error"
+		}
+	],
+	"repository": {
+		"comment_line": {
+			"name": "comment.line.double-slash",
+			"begin": "//",
+			"end": "\n",
+			"patterns": [{
+				"name": "comment.line.double-slash",
+				"match": "\\\\."
+			}]
+		},
+		"comment_block": {
+			"name": "comment.block",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"name": "comment.block",
+				"match": "\\\\."
+			}]
+		},
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.zxc",
+				"match": "\\b(def|int|string|main|print|struct)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.zxc",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.zxc",
+					"match": "\\\\."
+				}
+			]
+		},
+		"variables": {
+			"patterns": [{
+				"name": "variable.name",
+				"match": "\\b[A-Z][a-z]*\\b"
+			}]
+		},
+		"functions": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\bFUNC[a-z]+\\b"
+			}]
+		},
+		"digits": {
+			"patterns": [{
+				"name": "constant.numeric",
+				"match": "\\b[0-9]+\\b"
+			}]
+		},
+		"other": {
+			"patterns": [{
+				"name": "markup.other",
+				"match": "[-.{}();+?=><]"
+			}]
+		},
+		"error": {
+			"patterns": [{
+				"name": "invalid.illegal",
+				"match": "."
+			}]
+		}
+	},
+	"scopeName": "source.zxc"
+}
