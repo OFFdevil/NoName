@@ -23,3 +23,5 @@
 ---
 ## Отчёт:
 В файле <code>[Conclusion](conclusion/Conclusion.markdown)</code> подведён вывод по проделанной работе!
+
+## [Презентация](https://docs.google.com/presentation/d/12Ssf8MrPIqol_5TPuVn052qtaheL1NdSecucFlkzdp4/edit?usp=sharing)
